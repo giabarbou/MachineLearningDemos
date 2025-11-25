@@ -139,12 +139,12 @@ def train_svm(X, Y, gamma, C, tol):
     return X_sv, Y_sv, alphas_sv, b
 
 
-def predict_one(X_new, X_sv, Y_sv, alphas_sv, B, gamma):
+def predict_one(X_new, X_sv, Y_sv, alphas_sv, b, gamma):
     
     sqr_distances = np.sum((X_sv - X_new)**2, axis=1)
     K = np.exp(-gamma * sqr_distances)
     
-    decision = np.sum(alphas_sv * Y_sv * K) + B
+    decision = np.sum(alphas_sv * Y_sv * K) + b
     
     Y_new = np.sign(decision)
 
@@ -204,9 +204,9 @@ def main():
     gamma = 1.0 / len(Y)
     C = 100.0
 
-    X_sv, Y_sv, alphas_sv, B = train_svm(X_train, Y_train, gamma, C, tol)
+    X_sv, Y_sv, alphas_sv, b = train_svm(X_train, Y_train, gamma, C, tol)
 
-    Y_pred = predict(X_test, X_sv, Y_sv, alphas_sv, B, gamma)
+    Y_pred = predict(X_test, X_sv, Y_sv, alphas_sv, b, gamma)
 
     perf = classification_performance(Y_pred, Y_test)
 
